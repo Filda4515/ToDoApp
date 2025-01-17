@@ -10,11 +10,14 @@ import { ToDoItem } from "../model/ToDoItem";
 export class Tab1Page {
 
   items: ToDoItem[] = [];
+  toDoItems: ToDoItem[] = [];
+  doneItems: ToDoItem[] = [];
 
   constructor() {}
 
   async ionViewDidEnter()  {
     this.generateMockData();
+    this.updateLists();
   }
 
   private generateMockData() {
@@ -23,6 +26,16 @@ export class Tab1Page {
       new ToDoItem("Objednat se k doktorovi", false),
       new ToDoItem("Koupit nový počítač", true)
     ];
+  }
+
+  toggleDone(item: ToDoItem) {
+    item.isDone = !item.isDone;
+    this.updateLists();
+  }
+
+  updateLists() {
+    this.toDoItems = this.items.filter(item => !item.isDone);
+    this.doneItems = this.items.filter(item => item.isDone);
   }
 
 }

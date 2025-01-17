@@ -11,16 +11,37 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-list>
-    <ion-item-group *ngFor="let item of items">
-      <ion-item>
-        <ion-label>
-          <h3>{{ item.text }}</h3>
-          <p *ngIf="item.date">{{ item.date | date}}</p>
-          <p *ngIf="!item.date">No deadline set</p>
-        </ion-label>
-        <ion-checkbox justify="end" [(ngModel)]="item.isDone"></ion-checkbox>
-      </ion-item>
+  <ion-list [inset]="true">
+    <ion-item-group>
+      <ion-item-divider color="primary" *ngIf="toDoItems.length > 0">
+        <h3>To Do</h3>
+      </ion-item-divider>
+      <ng-container *ngFor="let item of toDoItems; let last = last;">
+        <ion-item [lines]="last ? 'none' : 'full'" (click)="toggleDone(item)">
+          <ion-label>
+            <h3>{{ item.text }}</h3>
+            <p *ngIf="item.date">{{ item.date | date}}</p>
+            <p *ngIf="!item.date">No deadline set</p>
+          </ion-label>
+          <ion-checkbox justify="end" [(ngModel)]="item.isDone" (ionChange)="updateLists()"></ion-checkbox>
+        </ion-item>
+      </ng-container>
+    </ion-item-group>
+
+    <ion-item-group>
+      <ion-item-divider  color="primary" *ngIf="doneItems.length > 0">
+        <h3>Done</h3>
+      </ion-item-divider>
+      <ng-container *ngFor="let item of doneItems; let last = last;">
+        <ion-item [lines]="last ? 'none' : 'full'" (click)="toggleDone(item)">
+          <ion-label>
+            <h3>{{ item.text }}</h3>
+            <p *ngIf="item.date">{{ item.date | date}}</p>
+            <p *ngIf="!item.date">No deadline set</p>
+          </ion-label>
+          <ion-checkbox justify="end" [(ngModel)]="item.isDone" (ionChange)="updateLists()"></ion-checkbox>
+        </ion-item>
+      </ng-container>
     </ion-item-group>
   </ion-list>
 </ion-content>
