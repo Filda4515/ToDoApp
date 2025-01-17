@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { ToDoItem } from "../model/ToDoItem";
 
+import { AppStorageService } from '../app-storage.service';
+import { ITEMS_STORAGE } from '../app.constants';
+
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
@@ -13,10 +16,16 @@ export class Tab1Page {
   toDoItems: ToDoItem[] = [];
   doneItems: ToDoItem[] = [];
 
-  constructor() {}
+  constructor(private appStorage: AppStorageService) {}
 
   async ionViewDidEnter()  {
-    this.generateMockData();
+    const loaded_items = await this.appStorage.get(ITEMS_STORAGE);
+
+    if (loaded_items) {
+      this.items = loaded_items;
+    } else {
+      this.generateMockData();
+    }
     this.updateLists();
   }
 
@@ -36,6 +45,7 @@ export class Tab1Page {
   updateLists() {
     this.toDoItems = this.items.filter(item => !item.isDone);
     this.doneItems = this.items.filter(item => item.isDone);
+    this.appStorage.set(ITEMS_STORAGE, this.items);
   }
 
 }

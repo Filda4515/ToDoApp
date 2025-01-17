@@ -1,0 +1,1 @@
+export const ITEMS_STORAGE = 'to-do-items'
