@@ -1,17 +1,49 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Tab 2
-    </ion-title>
+    <ion-title>Add new task</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
+      <ion-title size="large">Add new task</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+  <ion-content [fullscreen]="true">
+    <form (ngSubmit)="addItem()">
+      <ion-grid>
+        <ion-row class="ion-justify-content-center">
+          <ion-input
+            label="Task"
+            labelPlacement="stacked"
+            [clearInput]="true"
+            placeholder="Enter your task description"
+            [(ngModel)]="newItem.text"
+            name="text"
+            required
+          ></ion-input>
+        </ion-row>
+        <ion-row class="ion-justify-content-center ion-align-items-end">
+          <ion-datetime
+            #datePicker
+            [firstDayOfWeek]="1"
+            display-format="YYYY-MM-DD"
+            presentation="date"
+            [formatOptions]="{
+              date: { day: '2-digit', month: 'long' },
+            }"
+            [(ngModel)]="newItem.date"
+            name="date"
+          >
+            <span slot="title">Deadline (optional)</span>
+          </ion-datetime>
+          <ion-button class="ion-padding-start" color="danger" (click)="resetDate(datePicker)">Reset Date</ion-button>
+        </ion-row>
+      </ion-grid>
+
+      <ion-button expand="block" type="submit" [disabled]="!newItem.text">Add Task</ion-button>
+    </form>
+
 </ion-content>
