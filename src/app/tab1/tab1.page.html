@@ -16,7 +16,7 @@
       <ion-item-divider color="primary" *ngIf="toDoItems.length > 0">
         <h3>To Do</h3>
       </ion-item-divider>
-      <ng-container *ngFor="let item of toDoItems; let last = last;">
+      <ion-item-sliding *ngFor="let item of toDoItems; let last = last;">
         <ion-item [lines]="last ? 'none' : 'full'" (click)="toggleDone(item)">
           <ion-label>
             <h3>{{ item.text }}</h3>
@@ -25,14 +25,19 @@
           </ion-label>
           <ion-checkbox justify="end" [(ngModel)]="item.isDone" (ionChange)="updateLists()"></ion-checkbox>
         </ion-item>
-      </ng-container>
+        <ion-item-options side="end" (ionSwipe)="deleteItem(item)">
+          <ion-item-option color="danger" (click)="deleteItem(item)" expandable>
+            Delete
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
     </ion-item-group>
 
     <ion-item-group>
       <ion-item-divider  color="primary" *ngIf="doneItems.length > 0">
         <h3>Done</h3>
       </ion-item-divider>
-      <ng-container *ngFor="let item of doneItems; let last = last;">
+      <ion-item-sliding *ngFor="let item of doneItems; let last = last;">
         <ion-item [lines]="last ? 'none' : 'full'" (click)="toggleDone(item)">
           <ion-label>
             <h3>{{ item.text }}</h3>
@@ -41,7 +46,12 @@
           </ion-label>
           <ion-checkbox justify="end" [(ngModel)]="item.isDone" (ionChange)="updateLists()"></ion-checkbox>
         </ion-item>
-      </ng-container>
+        <ion-item-options side="end" (ionSwipe)="deleteItem(item)">
+          <ion-item-option color="danger" (click)="deleteItem(item)" expandable>
+            Delete
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
     </ion-item-group>
   </ion-list>
 </ion-content>

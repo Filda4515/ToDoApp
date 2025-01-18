@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { AlertController } from '@ionic/angular';
+
 import { ToDoItem } from "../model/ToDoItem";
 
 import { AppStorageService } from '../app-storage.service';
@@ -16,7 +18,7 @@ export class Tab1Page {
   toDoItems: ToDoItem[] = [];
   doneItems: ToDoItem[] = [];
 
-  constructor(private appStorage: AppStorageService) {}
+  constructor(private appStorage: AppStorageService, private alertController: AlertController) {}
 
   async ionViewDidEnter()  {
     const loaded_items = await this.appStorage.get(ITEMS_STORAGE);
@@ -46,6 +48,30 @@ export class Tab1Page {
     this.toDoItems = this.items.filter(item => !item.isDone);
     this.doneItems = this.items.filter(item => item.isDone);
     this.appStorage.set(ITEMS_STORAGE, this.items);
+  }
+
+  async deleteItem(item: ToDoItem) {
+    const alert = await this.alertController.create({
+      header: 'Confirm Delete',
+      message: `Are you sure you want to delete this task?`,
+      buttons: [
+        {
+          text: 'Cancel'
+        },
+        {
+          text: 'Delete',
+          handler: () => {
+            const index = this.items.findIndex(i => i === item);
+            if (index > -1) {
+              this.items.splice(index, 1);
+              this.appStorage.set(ITEMS_STORAGE, this.items);
+              this.updateLists();
+            }
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
 }
