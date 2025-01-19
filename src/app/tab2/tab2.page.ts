@@ -12,14 +12,23 @@ import { IonDatetime } from '@ionic/angular';
   standalone: false,
 })
 export class Tab2Page {
+
+  items: ToDoItem[] = [];
   newItem: ToDoItem = new ToDoItem('', false);
 
   constructor(private appStorage: AppStorageService) {}
 
-  async addItem() {
+  async ionViewDidEnter()  {
     const loaded_items = await this.appStorage.get(ITEMS_STORAGE);
-    loaded_items.push(this.newItem);
-    this.appStorage.set(ITEMS_STORAGE, loaded_items);
+
+    if (loaded_items) {
+      this.items = loaded_items;
+    }
+  }
+
+  async addItem() {
+    this.items.push(this.newItem);
+    this.appStorage.set(ITEMS_STORAGE, this.items);
     this.resetForm();
   }
 
