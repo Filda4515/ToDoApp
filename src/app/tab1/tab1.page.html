@@ -12,46 +12,50 @@
   </ion-header>
 
   <ion-list [inset]="true">
-    <ion-item-group>
-      <ion-item-divider color="primary" *ngIf="toDoItems.length > 0">
-        <h3>To Do</h3>
-      </ion-item-divider>
-      <ion-item-sliding *ngFor="let item of toDoItems; let last = last;">
-        <ion-item [lines]="last ? 'none' : 'full'" (click)="toggleDone(item)">
-          <ion-label>
-            <h3>{{ item.text }}</h3>
-            <p *ngIf="item.date">{{ item.date | date}}</p>
-            <p *ngIf="!item.date">No deadline set</p>
-          </ion-label>
-          <ion-checkbox justify="end" [(ngModel)]="item.isDone" (ionChange)="updateLists()"></ion-checkbox>
-        </ion-item>
-        <ion-item-options side="end" (ionSwipe)="deleteItem(item)">
-          <ion-item-option color="danger" (click)="deleteItem(item)" expandable>
-            Delete
-          </ion-item-option>
-        </ion-item-options>
-      </ion-item-sliding>
-    </ion-item-group>
+    <ng-container *ngIf="items | itemFilter: false as filteredItems">
+      <ion-item-group *ngIf="filteredItems.length">
+        <ion-item-divider color="primary">
+          <h3>To Do</h3>
+        </ion-item-divider>
+        <ion-item-sliding *ngFor="let item of filteredItems; let last = last;">
+          <ion-item [lines]="last ? 'none' : 'full'" (click)="toggleDone(item)">
+            <ion-label>
+              <h3>{{ item.text }}</h3>
+              <p *ngIf="item.date">{{ item.date | date}}</p>
+              <p *ngIf="!item.date">No deadline set</p>
+            </ion-label>
+            <ion-checkbox justify="end" [(ngModel)]="item.isDone" (ionChange)="toggleDone(item)"></ion-checkbox>
+          </ion-item>
+          <ion-item-options side="end" (ionSwipe)="deleteItem(item)">
+            <ion-item-option color="danger" (click)="deleteItem(item)" expandable>
+              Delete
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ion-item-group>
+    </ng-container>
 
-    <ion-item-group>
-      <ion-item-divider  color="primary" *ngIf="doneItems.length > 0">
-        <h3>Done</h3>
-      </ion-item-divider>
-      <ion-item-sliding *ngFor="let item of doneItems; let last = last;">
-        <ion-item [lines]="last ? 'none' : 'full'" (click)="toggleDone(item)">
-          <ion-label>
-            <h3>{{ item.text }}</h3>
-            <p *ngIf="item.date">{{ item.date | date}}</p>
-            <p *ngIf="!item.date">No deadline set</p>
-          </ion-label>
-          <ion-checkbox justify="end" [(ngModel)]="item.isDone" (ionChange)="updateLists()"></ion-checkbox>
-        </ion-item>
-        <ion-item-options side="end" (ionSwipe)="deleteItem(item)">
-          <ion-item-option color="danger" (click)="deleteItem(item)" expandable>
-            Delete
-          </ion-item-option>
-        </ion-item-options>
-      </ion-item-sliding>
-    </ion-item-group>
+    <ng-container *ngIf="items | itemFilter: true as filteredItems">
+      <ion-item-group *ngIf="filteredItems.length">
+        <ion-item-divider  color="primary">
+          <h3>Done</h3>
+        </ion-item-divider>
+        <ion-item-sliding *ngFor="let item of filteredItems; let last = last;">
+          <ion-item [lines]="last ? 'none' : 'full'" (click)="toggleDone(item)">
+            <ion-label>
+              <h3>{{ item.text }}</h3>
+              <p *ngIf="item.date">{{ item.date | date}}</p>
+              <p *ngIf="!item.date">No deadline set</p>
+            </ion-label>
+            <ion-checkbox justify="end" [(ngModel)]="item.isDone" (ionChange)="toggleDone(item)"></ion-checkbox>
+          </ion-item>
+          <ion-item-options side="end" (ionSwipe)="deleteItem(item)">
+            <ion-item-option color="danger" (click)="deleteItem(item)" expandable>
+              Delete
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ion-item-group>
+    </ng-container>
   </ion-list>
 </ion-content>

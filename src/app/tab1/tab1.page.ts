@@ -15,8 +15,6 @@ import { ITEMS_STORAGE } from '../app.constants';
 export class Tab1Page {
 
   items: ToDoItem[] = [];
-  toDoItems: ToDoItem[] = [];
-  doneItems: ToDoItem[] = [];
 
   constructor(private appStorage: AppStorageService, private alertController: AlertController) {}
 
@@ -27,8 +25,8 @@ export class Tab1Page {
       this.items = loaded_items;
     } else {
       this.generateMockData();
+      this.appStorage.set(ITEMS_STORAGE, this.items);
     }
-    this.updateLists();
   }
 
   private generateMockData() {
@@ -41,12 +39,6 @@ export class Tab1Page {
 
   toggleDone(item: ToDoItem) {
     item.isDone = !item.isDone;
-    this.updateLists();
-  }
-
-  updateLists() {
-    this.toDoItems = this.items.filter(item => !item.isDone);
-    this.doneItems = this.items.filter(item => item.isDone);
     this.appStorage.set(ITEMS_STORAGE, this.items);
   }
 
@@ -65,7 +57,6 @@ export class Tab1Page {
             if (index > -1) {
               this.items.splice(index, 1);
               this.appStorage.set(ITEMS_STORAGE, this.items);
-              this.updateLists();
             }
           }
         }
