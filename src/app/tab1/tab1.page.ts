@@ -4,7 +4,7 @@ import { AlertController } from '@ionic/angular';
 import { ToDoItem } from "../model/ToDoItem";
 
 import { AppStorageService } from '../app-storage.service';
-import { ITEMS_STORAGE } from '../app.constants';
+import { ITEMS_STORAGE, THEME_STORAGE } from '../app.constants';
 
 @Component({
   selector: 'app-tab1',
@@ -26,6 +26,17 @@ export class Tab1Page {
     } else {
       this.generateMockData();
       this.appStorage.set(ITEMS_STORAGE, this.items);
+    }
+
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+    this.appStorage.set(THEME_STORAGE, true);
+    const darkMode = await this.appStorage.get("theme");
+    console.log(darkMode);
+    if (darkMode !== null) {
+      document.documentElement.classList.toggle('ion-palette-dark', darkMode);
+    } else {
+      document.documentElement.classList.toggle('ion-palette-dark', prefersDark.matches);
     }
   }
 

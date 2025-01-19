@@ -14,7 +14,6 @@ export class GroupItemsPipe implements PipeTransform {
     };
 
     value.forEach((obj: any) => {
-      console.log(obj);
       const category = obj['isDone'] ? 'Done' : 'To Do';
       groupsDict[category].push(obj);
     });
@@ -26,7 +25,6 @@ export class GroupItemsPipe implements PipeTransform {
       list,
     }));
 
-    console.log(groups);
     return groups;
   }
 }
