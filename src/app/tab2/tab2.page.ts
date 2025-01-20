@@ -32,7 +32,6 @@ export class Tab2Page {
   async addItem() {
     this.items.push(this.newItem);
     this.appStorage.set(ITEMS_STORAGE, this.items);
-    this.resetForm();
 
     const confirmation = await this.alertController.create({
       header: 'Add to Calendar?',
@@ -49,21 +48,17 @@ export class Tab2Page {
     });
 
     await confirmation.present();
+    this.resetForm();
   }
 
   async addToNativeCalendar() {
     try {
-      await CapacitorCalendar.createEvent({
-        title: this.newItem.text,
-        endDate: this.newItem.date?.getDate()
+      await CapacitorCalendar.requestFullCalendarAccess();
+
+      await CapacitorCalendar.openCalendar({
+        date: this.newItem.date?.getDate()
       });
 
-      const alert = await this.alertController.create({
-        header: 'Success',
-        message: 'Task added to your calendar.',
-        buttons: ['OK'],
-      });
-      await alert.present();
     } catch (error) {
       console.error('Error adding event to calendar:', error);
       const alert = await this.alertController.create({
